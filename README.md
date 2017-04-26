@@ -4,12 +4,7 @@
 # PriceChanger  
 ##### Powered by Twitter
 -------------------
-#
-#
-#
-#
-#
-#
+
 PriceChanger is a friendly and useful app built using Python Language, powered by  Twitter DevTools, which helps to notify users whenever the price of the item goes down on popular online shopping portals like Flipkart, Amazon and SnapDeal.
 
 Built using Python language, it uses the following Python packages / modules :
@@ -60,8 +55,10 @@ $ pip install -r requirements.txt
 
 
 ### Usage
+ - Run both the python files using a cronjob on a server 
+  - On Twitter simply post the URL of any product from any popular ecommerece sites, and tweet it to @Price_Changer'
+                -     @Price_Changer <space> <URL>    
 
-Run both the python files using a cronjob on a server
 
 
 **Free Software, Hell Yeah!**
