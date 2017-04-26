@@ -57,7 +57,7 @@ $ pip install -r requirements.txt
 ### Usage
  - Run both the python files using a cronjob on a server 
   - On Twitter simply post the URL of any product from any popular ecommerece sites, and tweet it to @Price_Changer'
-                -     @Price_Changer <space> <URL>    
+                   @Price_Changer space URL    
 
 
 
