@@ -1,0 +1,11 @@
+#to install :  pip install -r requirements.txt
+
+####### requirements.txt #######
+#
+###### Requirements without Version Specifiers ######
+Requests
+beautifulsoup4
+python-twitter
+timestring
+pymongo
+#
