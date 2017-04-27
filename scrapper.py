@@ -64,8 +64,11 @@ def scrapper(url):
 #3.Post to MongoDb
 ####################
 def mongo_post(status_id, screen_name, url, price):   
+    parser = SafeConfigParser( )
+    parser.read('config.ini')
+
     is_replied = False
-    connection = MongoClient("mongodb://s.niktrix.in:27017")
+    connection = MongoClient(parser.get('mongo_server', 'mongo_url'))
     db = connection.pricechanger.Message
     pricechanger ={ }    
     pricechanger = {'status_id':status_id, 'url':url, 'screen_name':screen_name, 'price':int(price), 'is_replied':is_replied}
@@ -85,7 +88,7 @@ def mongo_post(status_id, screen_name, url, price):
 ################################
 def Tw_post( screen_name, price,  status_id):
     try:
-        status = api.PostUpdate( str("@"+screen_name) + "   Initial  Price   : " +str(price),in_reply_to_status_id=str(status_id))
+        status = api.PostUpdate( str("@"+screen_name) + "   Initial  Price  of your item is Rs. " +str(price),in_reply_to_status_id=str(status_id))
         print status.text
         print "Posted on Twitter"
     except twitter.error.TwitterError:

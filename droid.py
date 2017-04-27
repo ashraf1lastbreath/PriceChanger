@@ -10,7 +10,10 @@ from ConfigParser import SafeConfigParser
 #1. Retrieve Data from MongoDb :
 ################################ 
 def mongo_retrieve( ):
-    connection = MongoClient("mongodb://s.niktrix.in:27017")
+    parser = SafeConfigParser( )
+    parser.read('config.ini')
+
+    connection = MongoClient(parser.get('mongo_server', 'mongo_url'))
     db = connection.pricechanger.Message
 
     results = db.find({'is_replied': False})
