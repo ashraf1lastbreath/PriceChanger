@@ -1,32 +1,13 @@
 # -*- coding: utf-8 -*-
 
-import sys
-import re
 import twitter
 import requests
 import pymongo
 from pymongo import MongoClient
 from ConfigParser import SafeConfigParser
-import httplib
-import urlparse
 
-from scrapper import flipkart_scrapper
-
-#remove encoding etc appearing in url after '?' character 
-def removeURLencoding(url):
-   head, sep, tail = url.partition('?')
-   return head
-
-#Function to prevent twitter from shortening the URL
-def unshorten_url(url):
-    parsed = urlparse.urlparse(url)
-    h = httplib.HTTPConnection(parsed.netloc)
-    h.request('HEAD', parsed.path)
-    response = h.getresponse()
-    if response.status/100 == 3 and response.getheader('Location'):
-        return response.getheader('Location')
-    else:
-        return url
+from scrapper import flipkart_scrapper, amazon_scrapper, snapdeal_scrapper
+from utils import  removeURLencoding, find_domain, unshorten_url
 
 
  #1. Fetch Twitter Data
@@ -39,26 +20,29 @@ def get_Twdata(  api):
         msg =  mention.text
         status_id =  mention.id
         url = msg[15:]
-
         screen_name = mention.user.screen_name
 
         try:
             url = unshorten_url(url)
             url = removeURLencoding(url)
+            domain = find_domain(url)
 
-            #logic to compare Amazon, flipkart, snapdeal goes here
+            if domain== 'www.flipkart.com':
+                price = flipkart_scrapper(url)
+            elif domain== 'www.amazon.in':
+                price = amazon_scrapper(url)
+            elif domain== 'www.snapdeal.com':
+                price = snapdeal_scrapper(url)
+            else :
+                raise NotImplementedError ("This domain is not supported yet in our system. Be back Later !")
 
-
-            price = flipkart_scrapper(url)
-            #print mention
+            #post tweet only if it is new    
             isnew = mongo_post(status_id, screen_name, url, price)
-            #post tweet only if it is new
             if isnew:
                 Tw_post(screen_name, price,  status_id)
 
         except requests.exceptions.MissingSchema:
             print "Tweet status doesnt have any url"    
-
 
 
 #3.Post to MongoDb
@@ -96,7 +80,7 @@ def Tw_post( screen_name, price,  status_id):
 
 
 
-#Set up twitter API data
+#Set up twitter API data from config file
 #############################################################
 parser = SafeConfigParser()
 parser.read('config.ini')
