@@ -8,6 +8,25 @@ import twitter
 import pymongo
 from pymongo import MongoClient
 from ConfigParser import SafeConfigParser
+import httplib
+import urlparse
+
+#remove encoding etc appearing in url after '?' character 
+def removeURLencoding(url):
+   head, sep, tail = url.partition('?')
+   return head
+
+#Function to prevent twitter from shortening the URL
+def unshorten_url(url):
+    parsed = urlparse.urlparse(url)
+    h = httplib.HTTPConnection(parsed.netloc)
+    h.request('HEAD', parsed.path)
+    response = h.getresponse()
+    if response.status/100 == 3 and response.getheader('Location'):
+        return response.getheader('Location')
+    else:
+        return url
+
 
  #1. Fetch Twitter Data
 ####################Fetch Data for Mentions on TwitterHandle
@@ -19,9 +38,16 @@ def get_Twdata(  api):
         msg =  mention.text
         status_id =  mention.id
         url = msg[15:]
+
         screen_name = mention.user.screen_name
 
         try:
+            url = unshorten_url(url)
+            url = removeURLencoding(url)
+
+            #logic to compare Amazon, flipkart, snapdeal goes here
+
+
             price = scrapper(url)
             #print mention
             isnew = mongo_post(status_id, screen_name, url, price)
@@ -36,8 +62,16 @@ def get_Twdata(  api):
 #2. Scrap URL to fetch data
 ########################
 def scrapper(url):
-    print ""
-    response = requests.get(url)
+    print "" 
+    #include http header fields for Requests   
+    headers =   {
+    'Accept' : 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+    'Accept-Encoding' : 'gzip, deflate, sdch, br', 
+    'Accept-Language' : 'en-US,en;q=0.8',
+    'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
+    }
+    #fetch response from Requests
+    response = requests.get(url, headers=headers)    
     html = response.content            #fetch the entire HTML of the URL
     soup = BeautifulSoup(html,'html.parser')
 
@@ -50,11 +84,9 @@ def scrapper(url):
     #Retrieve price
     price = soup.find('div', attrs={'class': '_1vC4OE _37U4_g'}) 
     price_txt = price.get_text( ).encode(sys.stdout.encoding, errors='replace' )   #to retrieve the item name text
-    
     #Removing Non Numeric symbols from Price
     price_txt = re.sub("[^0-9]", "",price_txt )
     price_txt = int(price_txt)
-    #print price_txt+1
 
     print  "Present price  of  "+item_txt  + " on Flipkart  is :" + str(price_txt)
     print ""
