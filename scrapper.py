@@ -1,7 +1,11 @@
+# -*- coding: utf-8 -*-
+
 import requests
 import sys
 from bs4 import BeautifulSoup
 import re
+import logging
+logging.basicConfig( )
 
 #Scrap URL to fetch data
 ########################
@@ -17,7 +21,9 @@ def flipkart_scrapper(url):
     #fetch response from Requests
     response = requests.get(url, headers=headers)    
     html = response.content            #fetch the entire HTML of the URL
-    soup = BeautifulSoup(html,'html.parser')
+     #WorkAround : to solve issue  :"bs4.dammit:Some characters could not be decoded, and were replaced with REPLACEMENT CHARACTER."
+    html = html.decode('latin-1')
+    soup = BeautifulSoup(html,"lxlml")
 
     #retrieve Item
     item = soup.find('h1', attrs={'class': '_3eAQiD'})   #to find out only the tag we are interested in
@@ -38,7 +44,7 @@ def flipkart_scrapper(url):
 
 
 def amazon_scrapper(url):
-    print "" 
+    print ""
     #include http header fields for Requests   
     headers =   {
     'Accept' : 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
@@ -49,10 +55,14 @@ def amazon_scrapper(url):
     #fetch response from Requests
     response = requests.get(url, headers=headers)    
     html = response.content            #fetch the entire HTML of the URL
-    soup = BeautifulSoup(html,'html.parser')
 
-    #retrieve Item
-    item = soup.find('h1', attrs={'class': 'a-size-large a-spacing-none'})   #to find out only the tag we are interested in
+    #WorkAround : to solve issue  :"bs4.dammit:Some characters could not be decoded, and were replaced with REPLACEMENT CHARACTER."
+    html = html.decode('latin-1')
+    soup = BeautifulSoup(html, "lxml")
+
+
+    #retrieve Item 
+    item = soup.find('h1', attrs={'class': 'a-size-large a-spacing-none'})    
     item_txt = item.get_text( ).encode(sys.stdout.encoding, errors='replace' )  #to retrieve the item name text
     item_txt = item_txt.strip( )          # to remove trailing and leading whitespaces
     
@@ -79,7 +89,9 @@ def snapdeal_scrapper(url):
     #fetch response from Requests
     response = requests.get(url, headers=headers)    
     html = response.content            #fetch the entire HTML of the URL
-    soup = BeautifulSoup(html,'html.parser')
+    #WorkAround : to solve issue  :"bs4.dammit:Some characters could not be decoded, and were replaced with REPLACEMENT CHARACTER."
+    html = html.decode('latin-1')
+    soup = BeautifulSoup(html,"lxml")
 
     #retrieve Item
     item = soup.find('h1', attrs={'class': 'pdp-e-i-head'})   #to find out only the tag we are interested in
