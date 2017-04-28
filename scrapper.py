@@ -23,7 +23,7 @@ def flipkart_scrapper(url):
     html = response.content            #fetch the entire HTML of the URL
      #WorkAround : to solve issue  :"bs4.dammit:Some characters could not be decoded, and were replaced with REPLACEMENT CHARACTER."
     html = html.decode('latin-1')
-    soup = BeautifulSoup(html,"lxlml")
+    soup = BeautifulSoup(html,'html.parser')
 
     #retrieve Item
     item = soup.find('h1', attrs={'class': '_3eAQiD'})   #to find out only the tag we are interested in
@@ -58,8 +58,7 @@ def amazon_scrapper(url):
 
     #WorkAround : to solve issue  :"bs4.dammit:Some characters could not be decoded, and were replaced with REPLACEMENT CHARACTER."
     html = html.decode('latin-1')
-    soup = BeautifulSoup(html, "lxml")
-
+    soup = BeautifulSoup(html,'html.parser')
 
     #retrieve Item 
     item = soup.find('h1', attrs={'class': 'a-size-large a-spacing-none'})    
@@ -91,7 +90,7 @@ def snapdeal_scrapper(url):
     html = response.content            #fetch the entire HTML of the URL
     #WorkAround : to solve issue  :"bs4.dammit:Some characters could not be decoded, and were replaced with REPLACEMENT CHARACTER."
     html = html.decode('latin-1')
-    soup = BeautifulSoup(html,"lxml")
+    soup = BeautifulSoup(html,'html.parser')
 
     #retrieve Item
     item = soup.find('h1', attrs={'class': 'pdp-e-i-head'})   #to find out only the tag we are interested in
