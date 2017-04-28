@@ -32,9 +32,9 @@ def flipkart_scrapper(url):
     price_txt = re.sub("[^0-9]", "",price_txt )
     price_txt = int(price_txt)
 
-    print  "Present price  of  "+item_txt  + " on Flipkart  is Rs. " + str(price_txt)
+    print  "Present price  of  "+item_txt + " on Flipkart  is Rs. " + str(price_txt)
     print ""
-    return (price_txt )
+    return (price_txt, item_txt )
 
 
 def amazon_scrapper(url):
@@ -65,7 +65,7 @@ def amazon_scrapper(url):
 
     print  "Present price  of  "+item_txt  + " on Amazon  is  Rs. " + str(price_txt)
     print ""
-    return (price_txt )
+    return (price_txt, item_txt )
 
 def snapdeal_scrapper(url):
     print "" 
@@ -95,4 +95,4 @@ def snapdeal_scrapper(url):
 
     print  "Present price  of  "+item_txt  + " on Snapdeal  is  Rs. " + str(price_txt)
     print ""
-    return (price_txt )
+    return (price_txt, item_txt )

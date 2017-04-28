@@ -26,7 +26,7 @@ def mongo_retrieve( ):
         print record
         newprice = isPriceDecreased(record['url'],record['price'])
         if newprice > 0:
-            Tw_reduce_post(record['screen_name'], newprice, record['status_id'])
+            Tw_reduce_post(record['screen_name'], newprice, record['status_id'], record['item'])
             db.find_one_and_update(
                 {'_id': record['_id']},
                 {'$set': {'is_replied': True}}
@@ -36,7 +36,7 @@ def mongo_retrieve( ):
 #3. Post  Price Reduction Notification on Twitter :
 ########################################## 
 def Tw_reduce_post(screen_name, price,  status_id ):
-    status = api.PostUpdate( str("@"+screen_name) + "  Price of your item has reduced to  Rs. " +str(price),in_reply_to_status_id=str(status_id))
+    status = api.PostUpdate( str("@"+screen_name) + "  Price of " + item[:80] + " has reduced to Rs. " +str(price),in_reply_to_status_id=str(status_id))
     print(status.text)
     print "Posted on Twitter"
 
