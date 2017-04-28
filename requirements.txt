@@ -3,6 +3,8 @@
 ####### requirements.txt #######
 #
 ###### Requirements without Version Specifiers ######
+html5lib
+lxml
 Requests
 beautifulsoup4
 python-twitter
