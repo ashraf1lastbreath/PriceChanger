@@ -19,8 +19,7 @@ def get_Twdata(  api):
     for mention in mentions:
         msg =  mention.text
         status_id =  mention.id
-        #url = msg[15:]
-        url = 'https://www.flipkart.com/motorola-pulse-2-wired-headset-mic/p/itmej82rpqydah4f?pid=ACCEJ82RZ5TZWFNT&fm=personalisedRecommendation/p2p-cross&iid=R_29411a7c-92d1-4cf2-abeb-83d2d74f5863_R_009a5d40-ff9a-49c7-a454-8d74f62af4ba.ACCEJ82RZ5TZWFNT&otracker=hp_reco_More+to+Consider_2_Motorola+Pulse'
+        url = msg[15:]
         screen_name = mention.user.screen_name
 
         try:
@@ -37,6 +36,7 @@ def get_Twdata(  api):
                 scrapped = amazon_scrapper(url)
                 price = scrapped[0]
                 item   = scrapped[1]
+
             elif domain== 'www.snapdeal.com':
                 scrapped = snapdeal_scrapper(url)
                 price = scrapped[0]
