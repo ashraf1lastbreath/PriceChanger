@@ -2,12 +2,11 @@
 
 import twitter
 import requests
-import pymongo
 from pymongo import MongoClient
 from ConfigParser import SafeConfigParser
 
 from scrapper import flipkart_scrapper, amazon_scrapper, snapdeal_scrapper
-from utils import  removeURLencoding, find_domain, unshorten_url
+from utils import removeURLencoding , find_domain , unshorten_url
 
 
  #1. Fetch Twitter Data
