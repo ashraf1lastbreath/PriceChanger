@@ -1,10 +1,12 @@
-import sys
-import re
-import requests
-from bs4 import BeautifulSoup
+# -*- coding: utf-8 -*-
+
 import twitter
+import requests
 from pymongo import MongoClient
 from ConfigParser import SafeConfigParser
+
+from scrapper import flipkart_scrapper, amazon_scrapper, snapdeal_scrapper
+from utils import  removeURLencoding, find_domain, unshorten_url
 
 
 #1. Retrieve Data from MongoDb :
@@ -31,30 +33,6 @@ def mongo_retrieve( ):
             )
             
 
-#2. Scrap Data from website :
-################################ 
-def scrapper(url):
-    print ""
-    response = requests.get(url)
-    html = response.content            #fetch the entire HTML of the URL
-    soup = BeautifulSoup(html,'html.parser')
-
-    #retrieve Item
-    item = soup.find('h1', attrs={'class': '_3eAQiD'})   #to find out only the tag we are interested in
-    item_txt = item.get_text( ).encode(sys.stdout.encoding, errors='replace' )  #to retrieve the item name text
-    item_txt = item_txt.strip( )          # to remove trailing and leading whitespaces
-    #print "item_txt : ",item_txt
-
-    #Retrieve price
-    price = soup.find('div', attrs={'class': '_1vC4OE _37U4_g'}) 
-    price_txt = price.get_text( ).encode(sys.stdout.encoding, errors='replace' )   #to retrieve the item name text
-    #Removing Non Numeric symbols from Price
-    price_txt = re.sub("[^0-9]", "",price_txt )
-    price_txt = int(price_txt)
-
-    return (price_txt)
-
-
 #3. Post  Price Reduction Notification on Twitter :
 ########################################## 
 def Tw_reduce_post(screen_name, price,  status_id ):
@@ -66,7 +44,19 @@ def Tw_reduce_post(screen_name, price,  status_id ):
 #4. Compare price from Database and price from scrapper again:
 ####################################################### 
 def isPriceDecreased(url,oldprice):
-    newprice = scrapper(url)
+    url = unshorten_url(url)
+    url = removeURLencoding(url)
+    domain = find_domain(url)
+
+    if domain== 'www.flipkart.com':
+        newprice = flipkart_scrapper(url)
+    elif domain== 'www.amazon.in':
+        newprice = amazon_scrapper(url)
+    elif domain== 'www.snapdeal.com':
+        newprice = snapdeal_scrapper(url)
+    else :
+        raise NotImplementedError 
+
     print "newprice",newprice
     print "oldprice",oldprice
     if newprice < oldprice:
