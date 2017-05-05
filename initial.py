@@ -4,6 +4,7 @@ import twitter
 import requests
 import pymongo
 import os
+import sys
 from pymongo import MongoClient
 from ConfigParser import SafeConfigParser
 
@@ -51,7 +52,8 @@ def get_Twdata(  api):
                 Tw_post(screen_name, price,  status_id, item)
 
         except requests.exceptions.MissingSchema:
-            print "Tweet status doesnt have any url"    
+            print "Tweet status doesnt have any url"
+            sys.stdout.flush()    
 
 
 #3.Post to MongoDb
@@ -74,6 +76,7 @@ def mongo_post(status_id, screen_name, url, price, item):
         return False
 
     print " Data Posted to Database ..."
+    sys.stdout.flush()
     return True
     #connection.close()
 
@@ -85,8 +88,10 @@ def Tw_post( screen_name, price,  status_id, item):
         status = api.PostUpdate( str("@"+screen_name) + "  Initial Price of " + item[:85] + " is Rs. " +str(price),in_reply_to_status_id=str(status_id))
         print status.text
         print "Posted on Twitter"
+        sys.stdout.flush()
     except twitter.error.TwitterError:
         print "Duplicate Tweet !!"
+        sys.stdout.flush()
 
 
 
@@ -102,6 +107,7 @@ def Tw_post( screen_name, price,  status_id, item):
 def initial():
     #read API data from 'config.ini'  file
     print "Running parser"
+    sys.stdout.flush()
     api = twitter.Api(consumer_key = os.environ['consumer_key'],    
                       consumer_secret = os.environ['consumer_secret'],
                       access_token_key =  os.environ['access_token_key'],
