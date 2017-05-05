@@ -3,6 +3,8 @@
 import twitter
 import requests
 import pymongo
+import os
+import sys
 from pymongo import MongoClient
 from ConfigParser import SafeConfigParser
 
@@ -50,7 +52,8 @@ def get_Twdata(  api):
                 Tw_post(screen_name, price,  status_id, item)
 
         except requests.exceptions.MissingSchema:
-            print "Tweet status doesnt have any url"    
+            print "Tweet status doesnt have any url"
+            sys.stdout.flush()    
 
 
 #3.Post to MongoDb
@@ -60,7 +63,8 @@ def mongo_post(status_id, screen_name, url, price, item):
     parser.read('config.ini')
 
     is_replied = False
-    connection = MongoClient(parser.get('mongo_server', 'mongo_url'))
+    #connection = MongoClient(parser.get('mongo_server', 'mongo_url'))
+    connection = os.environ['mongo_url']
     db = connection.pricechanger.Message
     pricechanger ={ }    
     pricechanger = {'status_id':status_id, 'url':url, 'screen_name':screen_name, 'price':int(price), 'item':item, 'is_replied':is_replied}
@@ -72,6 +76,7 @@ def mongo_post(status_id, screen_name, url, price, item):
         return False
 
     print " Data Posted to Database ..."
+    sys.stdout.flush()
     return True
     #connection.close()
 
@@ -83,20 +88,30 @@ def Tw_post( screen_name, price,  status_id, item):
         status = api.PostUpdate( str("@"+screen_name) + "  Initial Price of " + item[:85] + " is Rs. " +str(price),in_reply_to_status_id=str(status_id))
         print status.text
         print "Posted on Twitter"
+        sys.stdout.flush()
     except twitter.error.TwitterError:
         print "Duplicate Tweet !!"
+        sys.stdout.flush()
 
 
 
 #Set up twitter API data from config file
 #############################################################
-parser = SafeConfigParser()
-parser.read('config.ini')
+#parser = SafeConfigParser()
+#parser.read('config.ini')
 
-#read API data from 'config.ini'  file
-api = twitter.Api(consumer_key = parser.get('twitter_API', 'consumer_key'),
-                      consumer_secret = parser.get('twitter_API', 'consumer_secret'),
-                      access_token_key = parser.get('twitter_API', 'access_token_key'),
-                      access_token_secret = parser.get('twitter_API', 'access_token_secret'))
 
-get_Twdata( api )      
+
+   
+
+def initial():
+    #read API data from 'config.ini'  file
+    print "Running parser"
+    sys.stdout.flush()
+    api = twitter.Api(consumer_key = os.environ['consumer_key'],    
+                      consumer_secret = os.environ['consumer_secret'],
+                      access_token_key =  os.environ['access_token_key'],
+                      access_token_secret =  os.environ['access_token_secret']
+    get_Twdata( api ) 
+                      
+    
