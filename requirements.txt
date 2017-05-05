@@ -10,4 +10,5 @@ beautifulsoup4
 python-twitter
 timestring
 pymongo
+APScheduler==3.0.0
 #

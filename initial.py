@@ -3,6 +3,7 @@
 import twitter
 import requests
 import pymongo
+import os
 from pymongo import MongoClient
 from ConfigParser import SafeConfigParser
 
@@ -60,7 +61,8 @@ def mongo_post(status_id, screen_name, url, price, item):
     parser.read('config.ini')
 
     is_replied = False
-    connection = MongoClient(parser.get('mongo_server', 'mongo_url'))
+    #connection = MongoClient(parser.get('mongo_server', 'mongo_url'))
+    connection = os.environ['mongo_url']
     db = connection.pricechanger.Message
     pricechanger ={ }    
     pricechanger = {'status_id':status_id, 'url':url, 'screen_name':screen_name, 'price':int(price), 'item':item, 'is_replied':is_replied}
@@ -90,13 +92,20 @@ def Tw_post( screen_name, price,  status_id, item):
 
 #Set up twitter API data from config file
 #############################################################
-parser = SafeConfigParser()
-parser.read('config.ini')
+#parser = SafeConfigParser()
+#parser.read('config.ini')
 
-#read API data from 'config.ini'  file
-api = twitter.Api(consumer_key = parser.get('twitter_API', 'consumer_key'),
-                      consumer_secret = parser.get('twitter_API', 'consumer_secret'),
-                      access_token_key = parser.get('twitter_API', 'access_token_key'),
-                      access_token_secret = parser.get('twitter_API', 'access_token_secret'))
 
-get_Twdata( api )      
+
+   
+
+def initial():
+    #read API data from 'config.ini'  file
+    print "Running parser"
+    api = twitter.Api(consumer_key = os.environ['consumer_key'],    
+                      consumer_secret = os.environ['consumer_secret'],
+                      access_token_key =  os.environ['access_token_key'],
+                      access_token_secret =  os.environ['access_token_secret']
+    get_Twdata( api ) 
+                      
+    
