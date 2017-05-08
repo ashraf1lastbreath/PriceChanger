@@ -1,5 +1,8 @@
+# -*- coding: utf-8 -*-
+
 from apscheduler.schedulers.blocking import BlockingScheduler
 from initial import initial
+import sys
 
 sched = BlockingScheduler()
 

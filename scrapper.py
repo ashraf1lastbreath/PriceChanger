@@ -21,12 +21,14 @@ def flipkart_scrapper(url):
     #fetch response from Requests
     response = requests.get(url, headers=headers)    
     html = response.content            #fetch the entire HTML of the URL
+    #print html
      #WorkAround : to solve issue  :"bs4.dammit:Some characters could not be decoded, and were replaced with REPLACEMENT CHARACTER."
-    html = html.decode('latin-1')
+    #html = html.decode('latin-1')
     soup = BeautifulSoup(html,'html.parser')
 
     #retrieve Item
     item = soup.find('h1', attrs={'class': '_3eAQiD'})   #to find out only the tag we are interested in
+    #print item
     item_txt = item.get_text( ).encode(sys.stdout.encoding, errors='replace' )  #to retrieve the item name text
     item_txt = item_txt.strip( )          # to remove trailing and leading whitespaces
     #print "item_txt : ",item_txt
@@ -64,6 +66,7 @@ def amazon_scrapper(url):
     item = soup.find('h1', attrs={'class': 'a-size-large a-spacing-none'})    
     item_txt = item.get_text( ).encode(sys.stdout.encoding, errors='replace' )  #to retrieve the item name text
     item_txt = item_txt.strip( )          # to remove trailing and leading whitespaces
+    #print item_txt 
     
     #Retrieve price
     price = soup.find('span', attrs={'class': 'a-size-medium a-color-price'}) 
