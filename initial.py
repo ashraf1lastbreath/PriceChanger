@@ -32,28 +32,32 @@ def get_Twdata( api):
             domain = find_domain(url)
 
             if domain== 'www.flipkart.com':
-                continue
-                #scrapped = flipkart_scrapper(url) 
-                #price = scrapped[0]
-                #item   = scrapped[1]
+                scrapped = flipkart_scrapper(url) 
+                price = scrapped[0]
+                item   = scrapped[1]
+                found = scrapped[2]
 
             elif domain== 'www.amazon.in':
-                continue
-                #scrapped = amazon_scrapper(url)
-                #price = scrapped[0]
-                #item   = scrapped[1]
+                scrapped = amazon_scrapper(url)
+                price = scrapped[0]
+                item   = scrapped[1]
+                found = scrapped[2]
 
             elif domain== 'www.snapdeal.com':
                 scrapped = snapdeal_scrapper(url)
                 price = scrapped[0]
                 item   = scrapped[1]
+                found = scrapped[2]
             else :
                 raise NotImplementedError ("This domain is not supported yet in our system. Be back Later !")
 
-            #post tweet only if it is new    
-            isnew = mongo_post(status_id, screen_name, url, price, item)
-            if isnew:
-                Tw_post(api, screen_name, price,  status_id, item)
+
+            #proceed only if scrapped data has been found     
+            if found :
+                #post tweet only if it is new    
+                isnew = mongo_post(status_id, screen_name, url, price, item)
+                if isnew:
+                    Tw_post(api, screen_name, price,  status_id, item)
 
         except requests.exceptions.MissingSchema:
             print "Tweet status doesnt have any url"
