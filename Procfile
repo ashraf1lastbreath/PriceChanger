@@ -1,1 +1,1 @@
-worker: python bootstrap.py
+clock: python bootstrap.py
