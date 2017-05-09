@@ -32,9 +32,10 @@ def get_Twdata( api):
             domain = find_domain(url)
 
             if domain== 'www.flipkart.com':
-                scrapped = flipkart_scrapper(url) 
-                price = scrapped[0]
-                item   = scrapped[1]
+                raise NotImplementedError ("This domain is not supported yet in our system. Be back Later !")
+                #scrapped = flipkart_scrapper(url) 
+                #price = scrapped[0]
+                #item   = scrapped[1]
 
             elif domain== 'www.amazon.in':
                 scrapped = amazon_scrapper(url)
