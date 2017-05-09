@@ -2,13 +2,21 @@
 
 from apscheduler.schedulers.blocking import BlockingScheduler
 from initial import initial
+from final import final
 import sys
 
 sched = BlockingScheduler()
 
-@sched.scheduled_job('interval', minutes=30)
-def timed_job():
-    initial()
+
+@sched.scheduled_job('interval', id='initial_fun', hours=1)
+def initial_fun( ):
+    initial( )
+
+
+@sched.scheduled_job('interval', id='final_fun', hours=3)
+def final_fun( ):
+    final( )
+
 
 @sched.scheduled_job('cron', day_of_week='mon-fri', hour=17)
 def scheduled_job():
