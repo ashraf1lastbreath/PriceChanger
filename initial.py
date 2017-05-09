@@ -38,9 +38,10 @@ def get_Twdata( api):
                 #item   = scrapped[1]
 
             elif domain== 'www.amazon.in':
-                scrapped = amazon_scrapper(url)
-                price = scrapped[0]
-                item   = scrapped[1]
+                continue
+                #scrapped = amazon_scrapper(url)
+                #price = scrapped[0]
+                #item   = scrapped[1]
 
             elif domain== 'www.snapdeal.com':
                 scrapped = snapdeal_scrapper(url)
