@@ -6,7 +6,7 @@ import sys
 
 sched = BlockingScheduler()
 
-@sched.scheduled_job('interval', minutes=1)
+@sched.scheduled_job('interval', minutes=30)
 def timed_job():
     initial()
 
