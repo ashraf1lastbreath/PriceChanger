@@ -8,12 +8,12 @@ import sys
 sched = BlockingScheduler()
 
 
-@sched.scheduled_job('interval', id='initial_fun', hours=1)
+@sched.scheduled_job('interval', id='initial_fun', hours=0.5)
 def initial_fun( ):
     initial( )
 
 
-@sched.scheduled_job('interval', id='final_fun', hours=3)
+@sched.scheduled_job('interval', id='final_fun', hours=2)
 def final_fun( ):
     final( )
 
