@@ -150,6 +150,7 @@ def snapdeal_scrapper(url):
 
     #Retrieve price
     try :
+        print "getting price"
         price = soup.find('span', attrs={'class': 'payBlkBig'}) 
         price_txt = price.get_text( )  #to retrieve the item name text
         #Removing Non Numeric symbols from Price
