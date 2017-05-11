@@ -8,7 +8,7 @@ import sys
 sched = BlockingScheduler()
 
 
-@sched.scheduled_job('interval', id='initial_fun', hours=0.5)
+@sched.scheduled_job('interval', id='initial_fun', minutes=0.5)
 def initial_fun( ):
     initial( )
 

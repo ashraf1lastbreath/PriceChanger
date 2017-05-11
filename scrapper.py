@@ -112,7 +112,7 @@ def amazon_scrapper(url):
 
 
 def snapdeal_scrapper(url):
-    print "" 
+    print "scrapping snapdeal" 
     #include http header fields for Requests   
     headers =   {
     'Accept' : 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
