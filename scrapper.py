@@ -130,7 +130,7 @@ def snapdeal_scrapper(url):
     #html = html.decode('latin-1')
     #html = html.decode('utf-8', 'ignore')
     soup = BeautifulSoup(html,'html.parser')
-    print html
+    #print html
     found = False
 
     #retrieve Item
