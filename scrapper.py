@@ -117,17 +117,18 @@ def snapdeal_scrapper(url):
     #include http header fields for Requests   
     headers =   {
     'Accept' : 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-    'Accept-Encoding' : 'utf-8', 
+    'Accept-Encoding' : 'gzip, deflate, sdch, br', 
     'Accept-Language' : 'en-US,en;q=0.8',
     'User-Agent' : 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.117 Safari/537.36'
     }
     #fetch response from Requests
     response = requests.get(url, headers=headers)    
+    response.encoding = 'utf-8'
     html = response.content            #fetch the entire HTML of the URL
     #print html
      #WorkAround : to solve issue  :"bs4.dammit:Some characters could not be decoded, and were replaced with REPLACEMENT CHARACTER."
     #html = html.decode('latin-1')
-    html = html.decode('utf-8', 'ignore')
+    #html = html.decode('utf-8', 'ignore')
     soup = BeautifulSoup(html,'html.parser')
     print html
     found = False
