@@ -127,7 +127,7 @@ def snapdeal_scrapper(url):
     #print html
      #WorkAround : to solve issue  :"bs4.dammit:Some characters could not be decoded, and were replaced with REPLACEMENT CHARACTER."
     #html = html.decode('latin-1')
-    html = html.encode('utf-8')
+    html = html.decode('utf-8', 'ignore')
     soup = BeautifulSoup(html,'html.parser')
     print html
     found = False
