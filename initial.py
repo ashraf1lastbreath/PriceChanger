@@ -75,7 +75,7 @@ def mongo_post(status_id, screen_name, url, price, item):
    # connection = os.environ['mongo_url']
     db = connection.pricechanger.message
     pricechanger ={ }    
-    pricechanger = {'status_id':status_id, 'url':url, 'screen_name':screen_name, 'price':int(price), 'item':Binary(item), 'is_replied':is_replied}
+    pricechanger = {'status_id':status_id, 'url':url, 'screen_name':screen_name, 'price':int(price), 'item':item, 'is_replied':is_replied}
     # Item name converted to Binary  to prevent loss  of the non utf-8 characters [Mongo supports only utf-8 encoding]
 
     try:
