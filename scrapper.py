@@ -137,7 +137,7 @@ def snapdeal_scrapper(url):
     try :
          #retrieve Item 
          item = soup.find('h1', attrs={'class': 'pdp-e-i-head'})   #to find out only the tag we are interested in
-         print item
+         #print item
          item_txt = item.get_text( ).encode(sys.stdout.encoding, errors='replace' )  #to retrieve the item name text
          item_txt = item_txt.strip( )          # to remove trailing and leading whitespaces
          #print item_txt 
