@@ -23,9 +23,10 @@ def flipkart_scrapper(url):
     html = response.content            #fetch the entire HTML of the URL
     #print html
      #WorkAround : to solve issue  :"bs4.dammit:Some characters could not be decoded, and were replaced with REPLACEMENT CHARACTER."
-    html = html.decode('latin-1')
+    #tml = html.decode('latin-1')
     soup = BeautifulSoup(html,'html.parser')
     found = False
+    html = html.encode('utf-8')
 
     #retrieve Item
     try :
