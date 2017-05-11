@@ -154,6 +154,7 @@ def snapdeal_scrapper(url):
         price_txt = price.get_text( )  #to retrieve the item name text
         #Removing Non Numeric symbols from Price
         price_txt = re.sub("[^0-9]", "",price_txt )
+        print price_txt
         price_txt = int(price_txt ) 
         found = True
         print "Price found"
