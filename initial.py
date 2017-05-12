@@ -78,6 +78,10 @@ def mongo_post(status_id, screen_name, url, price, item):
     pricechanger = {'status_id':status_id, 'url':url, 'screen_name':screen_name, 'price':int(price), 'item':item, 'is_replied':is_replied}
     # Item name converted to Binary  to prevent loss  of the non utf-8 characters [Mongo supports only utf-8 encoding]
 
+    #create unique Index on database
+    db.ensure_index('status_id', unique=True)
+    print "status id :", status_id 
+
     try:
         db.insert_one(pricechanger)
     except pymongo.errors.DuplicateKeyError:
