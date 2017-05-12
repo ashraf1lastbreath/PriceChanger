@@ -10,7 +10,7 @@ logging.basicConfig( )
 #Scrap URL to fetch data
 ########################
 def flipkart_scrapper(url):
-    print "" 
+    print "scrapping Flipkart URL" 
     #include http header fields for Requests   
     headers =   {
     'Accept' : 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
@@ -20,19 +20,17 @@ def flipkart_scrapper(url):
     }
     #fetch response from Requests
     response = requests.get(url, headers=headers)    
+    response.encoding = 'utf-8'      # define encoding at response level itself
     html = response.content            #fetch the entire HTML of the URL
-    #print html
-     #WorkAround : to solve issue  :"bs4.dammit:Some characters could not be decoded, and were replaced with REPLACEMENT CHARACTER."
-    #tml = html.decode('latin-1')
+    
     soup = BeautifulSoup(html,'html.parser')
     found = False
-    html = html.encode('utf-8')
 
     #retrieve Item
     try :
         item = soup.find('h1', attrs={'class': '_3eAQiD'})   #to find out only the tag we are interested in
         #print item
-        item_txt = item.get_text( ).encode(sys.stdout.encoding, errors='replace' )  #to retrieve the item name text
+        item_txt = item.get_text( ) #to retrieve the item name text
         item_txt = item_txt.strip( )          # to remove trailing and leading whitespaces
         #print "item_txt : ",item_txt
         found = True
@@ -44,7 +42,7 @@ def flipkart_scrapper(url):
     #Retrieve price
     try :
         price = soup.find('div', attrs={'class': '_1vC4OE _37U4_g'}) 
-        price_txt = price.get_text( ).encode(sys.stdout.encoding, errors='replace' )   #to retrieve the item name text
+        price_txt = price.get_text( ) #to retrieve the item name text
         #Removing Non Numeric symbols from Price
         price_txt = re.sub("[^0-9]", "",price_txt )
         price_txt = int(price_txt)
@@ -62,7 +60,7 @@ def flipkart_scrapper(url):
 
 
 def amazon_scrapper(url):
-    print "" 
+    print "scrapping Amazon URL"
     #include http header fields for Requests   
     headers =   {
     'Accept' : 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
@@ -72,10 +70,9 @@ def amazon_scrapper(url):
     }
     #fetch response from Requests
     response = requests.get(url, headers=headers)    
-    html = response.content            #fetch the entire HTML of the URL
-    #print html
-     #WorkAround : to solve issue  :"bs4.dammit:Some characters could not be decoded, and were replaced with REPLACEMENT CHARACTER."
-    html = html.decode('latin-1')
+    response.encoding = 'utf-8'      # define encoding at response level itself
+    html = response.content             #fetch the entire HTML of the URL
+
     soup = BeautifulSoup(html,'html.parser')
     found = False
 
@@ -83,7 +80,7 @@ def amazon_scrapper(url):
     try :
         #retrieve Item 
         item = soup.find('h1', attrs={'class': 'a-size-large a-spacing-none'})    
-        item_txt = item.get_text( ).encode(sys.stdout.encoding, errors='replace' )  #to retrieve the item name text
+        item_txt = item.get_text( )  #to retrieve the item name text
         item_txt = item_txt.strip( )          # to remove trailing and leading whitespaces
         #print item_txt 
         found = True
@@ -95,7 +92,7 @@ def amazon_scrapper(url):
     #Retrieve price
     try :
         price = soup.find('span', attrs={'class': 'a-size-medium a-color-price'}) 
-        price_txt = price.get_text( ).encode(sys.stdout.encoding, errors='replace' )   #to retrieve the item name text
+        price_txt = price.get_text( )  #to retrieve the item name text
         #Removing Non Numeric symbols from Price
         price_txt = re.sub("[^0-9]", "",price_txt )
         price_txt = int(price_txt ) / 100
@@ -113,7 +110,7 @@ def amazon_scrapper(url):
 
 
 def snapdeal_scrapper(url):
-    print "scrapping snapdeal" 
+    print "scrapping Snapdeal URL" 
     #include http header fields for Requests   
     headers =   {
     'Accept' : 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
