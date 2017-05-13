@@ -16,7 +16,7 @@ def mongo_retrieve( api):
     parser.read('config.ini')
 
     connection = MongoClient(parser.get('mongo_server', 'mongo_url'))
-    db = connection.pricechanger.message
+    db = connection.pricechanger.tweet
 
     results = db.find({'is_replied': False})
     print " "

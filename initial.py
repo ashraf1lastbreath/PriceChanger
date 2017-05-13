@@ -20,10 +20,10 @@ def get_Twdata( api):
     for mention in mentions:
         msg =  mention.text
         status_id =  mention.id
-        #url = msg[15:]
+        url = msg[15:]
         #url = "https://www.flipkart.com/sony-hdr-as200v-sports-action-camera/p/itme7ekvf2yyagrp?pid=CAME7EKVXVP82TGQ&ref=L%3A3320254210301575680&srno=p_2&query=Sony+AS200V&otracker=from-search"
         #url= "http://www.amazon.in/Converse-Unisex-Black-Sneakers-India/dp/B01N12Z86Z/ref=sr_1_1?s=shoes&rps=1&ie=UTF8&qid=1494154307&sr=1-1&nodeID=9780815031&psd=1"
-        url = "https://www.snapdeal.com/product/micromax-spark-vdeo-q15-8gb/636218001907"
+        #url = "https://www.snapdeal.com/product/micromax-spark-vdeo-q15-8gb/636218001907"
         screen_name = mention.user.screen_name
 
         try:
@@ -67,21 +67,23 @@ def get_Twdata( api):
 #3.Post to MongoDb
 ####################
 def mongo_post(status_id, screen_name, url, price, item):   
-    from bson.binary import Binary
     parser = SafeConfigParser( )
     parser.read('config.ini')
     is_replied = False
     connection = MongoClient(parser.get('mongo_server', 'mongo_url'))
    # connection = os.environ['mongo_url']
-    db = connection.pricechanger.message
+   
+    db = connection.pricechanger.tweet
+    #create unique Index on database
+    db.ensure_index('status_id', unique=True)
+    print "status id :", status_id 
+
     pricechanger ={ }    
     pricechanger = {'status_id':status_id, 'url':url, 'screen_name':screen_name, 'price':int(price), 'item':item, 'is_replied':is_replied}
     # Item name converted to Binary  to prevent loss  of the non utf-8 characters [Mongo supports only utf-8 encoding]
     print "status id :", status_id  #Debug
 
-    #create unique Index on database
-    db.ensure_index('status_id', unique=True)
-    print "status id :", status_id 
+   
 
     try:
         db.insert_one(pricechanger)
