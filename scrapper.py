@@ -41,7 +41,7 @@ def flipkart_scrapper(url):
     item = soup.find('h1', attrs={'class': '_3eAQiD'})   #to find out only the tag we are interested in
     if item== None :
         try :
-            item_txt = desc.split("Buy ")[1].split("Rs. " )[0]  
+            item_txt = desc.split("Buy ")[1].split("Rs. " )[0]   #if not found, try scrapping using Title metadata name : description  
             print "Item found:",item_txt
         except:
             item_txt = " "
@@ -59,9 +59,9 @@ def flipkart_scrapper(url):
 
     #retrieve price
     price = soup.find('div', attrs={'class': '_1vC4OE _37U4_g'}) 
-    if price== None :
+    if price== None :            
         try :
-            price_txt = desc.split("Rs. ")[1].split(" ")[0]
+            price_txt = desc.split("Rs. ")[1].split(" ")[0]                 #if not found, try scrapping using Title metadata name : description  
             print "Price found :",str(price_txt)
         except :
             price_txt = 0
@@ -106,32 +106,56 @@ def amazon_scrapper(url):
     found = False
 
     #retrieve Item
-    try :
-        #retrieve Item 
-        item = soup.find('h1', attrs={'class': 'a-size-large a-spacing-none'})    
-        #item_txt = item.get_text( ).encode(sys.stdout.encoding, errors='replace' )
+    item = soup.find('h1', attrs={'class': 'a-size-large a-spacing-none'})
+    print "item :",item
+    if item == None:
+        try :
+            item = soup.find('h1', attrs={'class': 'a-size-large a-spacing-none'})
+            item_txt = item.get_text( ).encode(sys.stdout.encoding, errors='replace' )
+            item_txt = item_txt.strip( )          # to remove trailing and leading whitespaces
+            print "Debug 1 : item_txt found :", item_txt 
+            found = True
+        except :
+            item_txt = ""
+            found = False
+            print "Error 1 : Product not found"
+    else :
         item_txt = item.get_text( )  #to retrieve the item name text
         item_txt = item_txt.strip( )          # to remove trailing and leading whitespaces
-        #print item_txt 
+        print "Debug 2 : item_txt found :", item_txt 
         found = True
-    except:
-        item_txt = ""
-        found = False
-        print "Product not found"
 
-    #Retrieve price
-    try :
-        price = soup.find('span', attrs={'class': 'a-size-medium a-color-price'}) 
-        price_txt = price.get_text( )  #to retrieve the item name text
-        #Removing Non Numeric symbols from Price
-        price_txt = re.sub("[^0-9]", "",price_txt )
-        price_txt = int(price_txt ) / 100
-        found = True
-        print "Price found"
-    except :
-        price_txt = 0
+    #retrieve price
+    price = soup.find('span', attrs={'class': 'a-size-medium a-color-price'}) 
+    print "price :",price
+    if price ==None:
+        try :
+            price = soup.find('span', attrs={'class': 'a-size-medium a-color-price'}) 
+            price_txt = price.get_text( ).encode(sys.stdout.encoding, errors='replace' )  #to retrieve the item name text
+            #Removing Non Numeric symbols from Price
+            price_txt = re.sub("[^0-9]", "",price_txt )
+            price_txt = int(price_txt ) / 100
+            found = True
+            print "Debug 1 : Price found :",price_txt
+        except :
+            price_txt = 0
         found = False
+        print "Error 1 : Price not found"
         pass
+    else :
+        try :
+            price = soup.find('span', attrs={'class': 'a-size-medium a-color-price'}) 
+            price_txt = price.get_text( ) #to retrieve the item name text
+            #Removing Non Numeric symbols from Price
+            price_txt = re.sub("[^0-9]", "",price_txt )
+            price_txt = int(price_txt ) / 100
+            found = True
+            print "Debug 2 : Price found :",price_txt
+        except :
+            price_txt = 0
+            found = False
+            print "Error 2 : Price not found"
+            pass
 
     print  "Present price  of  "+item_txt + " on  Amazon  is Rs. " + str(price_txt)
     print ""
