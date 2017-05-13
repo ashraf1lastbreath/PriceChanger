@@ -21,8 +21,8 @@ def get_Twdata( api):
         msg =  mention.text
         status_id =  mention.id
         url = msg[15:]
-        #url = "https://www.flipkart.com/optimum-nutrition-opti-women/p/itmeh9qafpengz2d?pid=VSLEH9QAJAMUYQBF&srno=b_1_10&otracker=clp_banner_1_2.bannerX3.BANNER_health-category-store_3da0d04d-2f43-4c9b-90ee-4e9a7b072862_wp1&lid=LSTVSLEH9QAJAMUYQBFMQMDV2"
-        #url= "http://www.amazon.in/Converse-Unisex-Black-Sneakers-India/dp/B01N12Z86Z/ref=sr_1_1?s=shoes&rps=1&ie=UTF8&qid=1494154307&sr=1-1&nodeID=9780815031&psd=1"
+        #url = "https://www.flipkart.com/hp-1-tb-wired-external-hard-disk-drive/p/itmebqdzrfdyy6h4"
+        #url= "http://www.amazon.in/Sanyo-inches-XT-43S7100F-Full-Black/dp/B01ICVLK4S?_encoding=UTF8&deviceType=desktop&ref_=br_isw_strs-1"
         #url = "https://www.snapdeal.com/product/micromax-spark-vdeo-q15-8gb/636218001907"
         screen_name = mention.user.screen_name
 
@@ -74,14 +74,16 @@ def mongo_post(status_id, screen_name, url, price, item):
    # connection = os.environ['mongo_url']
 
     db = connection.pricechanger.tweet
+
     #create unique Index on database
     #db.createIndex( { "status_id": 1 }, { unique: true } )
-    db.create_index(
+    '''db.create_index(
     [("status_id", pymongo.ASCENDING)],
     unique=True
-)
+     )'''
 
-    #db.ensure_index('status_id', unique=True)
+     #ensure_index seems to work better than create_index
+    db.ensure_index('status_id', unique=True)
     print "status id :", status_id 
 
     pricechanger ={ }    
@@ -89,7 +91,6 @@ def mongo_post(status_id, screen_name, url, price, item):
     # Item name converted to Binary  to prevent loss  of the non utf-8 characters [Mongo supports only utf-8 encoding]
     print "status id :", status_id  #Debug
 
-   
 
     try:
         db.insert_one(pricechanger)

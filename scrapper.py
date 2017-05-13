@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import requests
-#import sys
+import sys
 from bs4 import BeautifulSoup
 import re
 import logging
@@ -10,6 +10,7 @@ logging.basicConfig( )
 #Scrap URL to fetch data
 ########################
 def flipkart_scrapper(url):
+    print ""
     print "scrapping Flipkart URL" 
     #include http header fields for Requests   
     headers =   {
@@ -31,13 +32,18 @@ def flipkart_scrapper(url):
     if desc == None:
         desc= soup.find(attrs={'name':'description'})
     try:
+        #print desc['content']
         desc =  desc['content']
     except Exception as e:
         print '%s (%s)' % (e.message, type(e))
 
     #retrieve Item 
     try:
-        item_txt = desc.split("Buy ")[1].split("Rs" )[0]
+        item_txt = desc.split("Buy ")[1].split("Rs. " )[0]
+        #item_txt = item.get_text( ).encode(sys.stdout.encoding, errors='replace' )
+        print "item_txt  first:",item_txt
+        #item_text= item_text.encoding = 'utf-8'  
+        #print "item_txt  2nd :",item_txt
         print "Item :",item_txt
     except:
         item_txt = " "
@@ -47,7 +53,8 @@ def flipkart_scrapper(url):
 
      #Retrieve price
     try:
-        price_txt = int(desc.split("Rs.")[1].split(" ")[0])
+        price_txt = desc.split("Rs. ")[1].split(" ")[0]
+        #price_txt= price_txt.encoding = 'utf-8'  
         print "Price  :",str(price_txt)
     except:
         price_txt = 0
@@ -56,11 +63,12 @@ def flipkart_scrapper(url):
 
     print  "Present price  of  "+item_txt + " on Flipkart  is Rs. " + str(price_txt)
     print ""
-    return (price_txt, item_txt, found )
+    return (int(price_txt), item_txt, found )
 
 
 
 def amazon_scrapper(url):
+    print ""
     print "scrapping Amazon URL"
     #include http header fields for Requests   
     headers =   {
@@ -81,7 +89,8 @@ def amazon_scrapper(url):
     try :
         #retrieve Item 
         item = soup.find('h1', attrs={'class': 'a-size-large a-spacing-none'})    
-        item_txt = item.get_text( )  #to retrieve the item name text
+        item_txt = item.get_text( ).encode(sys.stdout.encoding, errors='replace' )
+        #item_txt = item.get_text( )  #to retrieve the item name text
         item_txt = item_txt.strip( )          # to remove trailing and leading whitespaces
         #print item_txt 
         found = True
@@ -111,6 +120,7 @@ def amazon_scrapper(url):
 
 
 def snapdeal_scrapper(url):
+    print ""
     print "scrapping Snapdeal URL" 
     #include http header fields for Requests   
     headers =   {
