@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import requests
-import sys
+#import sys
 from bs4 import BeautifulSoup
 import re
 import logging
@@ -26,29 +26,30 @@ def flipkart_scrapper(url):
     soup = BeautifulSoup(html,'html.parser')
     found = False
 
-    #retrieve Item
-    try :
-        item = soup.find('h1', attrs={'class': '_3eAQiD'})   #to find out only the tag we are interested in
-        #print item
-        item_txt = item.get_text( ) #to retrieve the item name text
-        item_txt = item_txt.strip( )          # to remove trailing and leading whitespaces
-        #print "item_txt : ",item_txt
-        found = True
+    #Scrap from metadata tag for Description or description
+    desc= soup.find(attrs={'name':'Description'})
+    if desc == None:
+        desc= soup.find(attrs={'name':'description'})
+    try:
+        desc =  desc['content']
+    except Exception as e:
+        print '%s (%s)' % (e.message, type(e))
+
+    #retrieve Item 
+    try:
+        item_txt = desc.split("Buy ")[1].split("Rs" )[0]
+        print "Item :",item_txt
     except:
-        item_txt = ""
+        item_txt = " "
         found = False
         print "Product not found"
 
-    #Retrieve price
-    try :
-        price = soup.find('div', attrs={'class': '_1vC4OE _37U4_g'}) 
-        price_txt = price.get_text( ) #to retrieve the item name text
-        #Removing Non Numeric symbols from Price
-        price_txt = re.sub("[^0-9]", "",price_txt )
-        price_txt = int(price_txt)
-        found = True
-        print "Price found"
-    except :
+
+     #Retrieve price
+    try:
+        price_txt = int(desc.split("Rs.")[1].split(" ")[0])
+        print "Price  :",str(price_txt)
+    except:
         price_txt = 0
         found = False
         pass
