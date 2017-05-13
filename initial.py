@@ -34,8 +34,11 @@ def get_Twdata( api):
             if domain== 'www.flipkart.com':
                 scrapped = flipkart_scrapper(url) 
                 price = scrapped[0]
+                print "price returned :",price
                 item   = scrapped[1]
+                print "item returned :",item
                 found = scrapped[2]
+                print "found value returned :",found
 
             elif domain== 'www.amazon.in':
                 scrapped = amazon_scrapper(url)

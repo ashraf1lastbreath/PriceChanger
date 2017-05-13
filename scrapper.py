@@ -42,7 +42,8 @@ def flipkart_scrapper(url):
     if item== None :
         try :
             item_txt = desc.split("Buy ")[1].split("Rs. " )[0]   #if not found, try scrapping using Title metadata name : description  
-            print "Item found:",item_txt
+            print "Debug 1 : Item found:",item_txt
+            found = True
         except:
             item_txt = " "
             found = False
@@ -51,7 +52,8 @@ def flipkart_scrapper(url):
         try :
             item_txt = item.get_text( )         #to retrieve the item name text
             item_txt = item_txt.strip( )          # to remove trailing and leading whitespaces
-            print "item_txt  found: ",item_txt
+            print "Debug 2 : item_txt  found: ",item_txt
+            found = True
         except :
             item_txt = item
             found = False
@@ -62,7 +64,8 @@ def flipkart_scrapper(url):
     if price== None :            
         try :
             price_txt = desc.split("Rs. ")[1].split(" ")[0]                 #if not found, try scrapping using Title metadata name : description  
-            print "Price found :",str(price_txt)
+            print "Debug 1 : Price found :",str(price_txt)
+            found = True
         except :
             price_txt = 0
             found = False
@@ -74,6 +77,8 @@ def flipkart_scrapper(url):
             #Removing Non Numeric symbols from Price
             price_txt = re.sub("[^0-9]", "",price_txt )
             price_txt = int(price_txt)
+            print "Debug 2 : Price found :",str(price_txt)
+            found = True
         except :
             price_txt = 0
             found = False
@@ -107,7 +112,6 @@ def amazon_scrapper(url):
 
     #retrieve Item
     item = soup.find('h1', attrs={'class': 'a-size-large a-spacing-none'})
-    print "item :",item
     if item == None:
         try :
             item = soup.find('h1', attrs={'class': 'a-size-large a-spacing-none'})
@@ -127,7 +131,6 @@ def amazon_scrapper(url):
 
     #retrieve price
     price = soup.find('span', attrs={'class': 'a-size-medium a-color-price'}) 
-    print "price :",price
     if price ==None:
         try :
             price = soup.find('span', attrs={'class': 'a-size-medium a-color-price'}) 
