@@ -21,7 +21,7 @@ def get_Twdata( api):
         msg =  mention.text
         status_id =  mention.id
         url = msg[15:]
-        #url = "https://www.flipkart.com/sony-hdr-as200v-sports-action-camera/p/itme7ekvf2yyagrp?pid=CAME7EKVXVP82TGQ&ref=L%3A3320254210301575680&srno=p_2&query=Sony+AS200V&otracker=from-search"
+        #url = "https://www.flipkart.com/optimum-nutrition-opti-women/p/itmeh9qafpengz2d?pid=VSLEH9QAJAMUYQBF&srno=b_1_10&otracker=clp_banner_1_2.bannerX3.BANNER_health-category-store_3da0d04d-2f43-4c9b-90ee-4e9a7b072862_wp1&lid=LSTVSLEH9QAJAMUYQBFMQMDV2"
         #url= "http://www.amazon.in/Converse-Unisex-Black-Sneakers-India/dp/B01N12Z86Z/ref=sr_1_1?s=shoes&rps=1&ie=UTF8&qid=1494154307&sr=1-1&nodeID=9780815031&psd=1"
         #url = "https://www.snapdeal.com/product/micromax-spark-vdeo-q15-8gb/636218001907"
         screen_name = mention.user.screen_name
