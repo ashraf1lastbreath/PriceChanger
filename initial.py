@@ -75,7 +75,12 @@ def mongo_post(status_id, screen_name, url, price, item):
 
     db = connection.pricechanger.tweet
     #create unique Index on database
-    db.createIndex( { "status_id": 1 }, { unique: true } )
+    #db.createIndex( { "status_id": 1 }, { unique: true } )
+    db.create_index(
+    [("status_id", pymongo.ASCENDING)],
+    unique=True
+)
+
     #db.ensure_index('status_id', unique=True)
     print "status id :", status_id 
 
