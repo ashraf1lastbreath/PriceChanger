@@ -72,10 +72,11 @@ def mongo_post(status_id, screen_name, url, price, item):
     is_replied = False
     connection = MongoClient(parser.get('mongo_server', 'mongo_url'))
    # connection = os.environ['mongo_url']
-   
+
     db = connection.pricechanger.tweet
     #create unique Index on database
-    db.ensure_index('status_id', unique=True)
+    db.createIndex( { "status_id": 1 }, { unique: true } )
+    #db.ensure_index('status_id', unique=True)
     print "status id :", status_id 
 
     pricechanger ={ }    
