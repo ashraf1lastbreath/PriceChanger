@@ -34,31 +34,52 @@ def flipkart_scrapper(url):
     try:
         #print desc['content']
         desc =  desc['content']
-    except Exception as e:
-        print '%s (%s)' % (e.message, type(e))
+    except :
+        print "Meta tag Description 'Content' not found"
 
     #retrieve Item 
-    try:
-        item_txt = desc.split("Buy ")[1].split("Rs. " )[0]
-        #item_txt = item.get_text( ).encode(sys.stdout.encoding, errors='replace' )
+    item = soup.find('h1', attrs={'class': '_3eAQiD'})   #to find out only the tag we are interested in
+    if item== None :
+        try :
+            item_txt = desc.split("Buy ")[1].split("Rs. " )[0]  
+            print "Item found:",item_txt
+        except:
+            item_txt = " "
+            found = False
+            print "Error 1 : Product not found"
+    else :
+        try :
+            item_txt = item.get_text( )         #to retrieve the item name text
+            item_txt = item_txt.strip( )          # to remove trailing and leading whitespaces
+            print "item_txt  found: ",item_txt
+        except :
+            item_txt = item
+            found = False
+            print "Error 2 : Product not found"
 
-        #item_txt= item_txt.encoding = 'utf-8'  
-        print "Item :",item_txt
-    except:
-        item_txt = " "
-        found = False
-        print "Product not found"
-
-
-     #Retrieve price
-    try:
-        price_txt = desc.split("Rs. ")[1].split(" ")[0]
-        #price_txt= price_txt.encoding = 'utf-8'  
-        print "Price  :",str(price_txt)
-    except:
-        price_txt = 0
-        found = False
-        pass
+    #retrieve price
+    price = soup.find('div', attrs={'class': '_1vC4OE _37U4_g'}) 
+    if price== None :
+        try :
+            price_txt = desc.split("Rs. ")[1].split(" ")[0]
+            print "Price found :",str(price_txt)
+        except :
+            price_txt = 0
+            found = False
+            print "Error 1 : Price not found"
+            pass
+    else :
+        try :
+            price_txt = price.get_text( )          #to retrieve the item name text
+            #Removing Non Numeric symbols from Price
+            price_txt = re.sub("[^0-9]", "",price_txt )
+            price_txt = int(price_txt)
+        except :
+            price_txt = 0
+            found = False
+            print "Error 2 : Price not found"
+            pass
+ 
 
     print  "Present price  of  "+item_txt + " on Flipkart  is Rs. " + str(price_txt)
     print ""
