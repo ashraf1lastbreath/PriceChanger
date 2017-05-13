@@ -19,7 +19,6 @@ def flipkart_scrapper(url):
     'Accept-Language' : 'en-US,en;q=0.8',
     'User-Agent' : 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.117 Safari/537.36'
     }
-
     #fetch response from Requests
     response = requests.get(url, headers=headers)    
     response.encoding = 'utf-8'      # define encoding at response level itself
@@ -33,27 +32,32 @@ def flipkart_scrapper(url):
     if desc == None:
         desc= soup.find(attrs={'name':'description'})
     try:
+        #print desc['content']
         desc =  desc['content']
     except Exception as e:
         print '%s (%s)' % (e.message, type(e))
 
-
+    #retrieve Item 
     try:
-
-        #retrieve Item 
         item_txt = desc.split("Buy ")[1].split("Rs. " )[0]
-        #print "Item :",item_txt
+        #item_txt = item.get_text( ).encode(sys.stdout.encoding, errors='replace' )
 
-        #Retrieve price
-        price_txt = desc.split("Rs. ")[1].split(" ")[0]
-        #price_txt= price_txt.encoding = 'utf-8'  
-        #print "Price  :",str(price_txt)
-
+        #item_txt= item_txt.encoding = 'utf-8'  
+        print "Item :",item_txt
     except:
         item_txt = " "
-        price_txt = 0
         found = False
         print "Product not found"
+
+
+     #Retrieve price
+    try:
+        price_txt = desc.split("Rs. ")[1].split(" ")[0]
+        #price_txt= price_txt.encoding = 'utf-8'  
+        print "Price  :",str(price_txt)
+    except:
+        price_txt = 0
+        found = False
         pass
 
     print  "Present price  of  "+item_txt + " on Flipkart  is Rs. " + str(price_txt)
@@ -82,15 +86,20 @@ def amazon_scrapper(url):
 
     #retrieve Item
     try :
-
         #retrieve Item 
         item = soup.find('h1', attrs={'class': 'a-size-large a-spacing-none'})    
         #item_txt = item.get_text( ).encode(sys.stdout.encoding, errors='replace' )
         item_txt = item.get_text( )  #to retrieve the item name text
         item_txt = item_txt.strip( )          # to remove trailing and leading whitespaces
         #print item_txt 
+        found = True
+    except:
+        item_txt = ""
+        found = False
+        print "Product not found"
 
-        #Retrieve price
+    #Retrieve price
+    try :
         price = soup.find('span', attrs={'class': 'a-size-medium a-color-price'}) 
         price_txt = price.get_text( )  #to retrieve the item name text
         #Removing Non Numeric symbols from Price
@@ -98,12 +107,9 @@ def amazon_scrapper(url):
         price_txt = int(price_txt ) / 100
         found = True
         print "Price found"
-
-    except:
-
-        item_txt = ""
+    except :
+        price_txt = 0
         found = False
-        print "Product not found"
         pass
 
     print  "Present price  of  "+item_txt + " on  Amazon  is Rs. " + str(price_txt)
@@ -143,23 +149,26 @@ def snapdeal_scrapper(url):
          item_txt = item.get_text( )
          item_txt = item_txt.strip( )          # to remove trailing and leading whitespaces
          #print item_txt 
-
-         #Retrieve price
-         print "getting price"
-         price = soup.find('span', attrs={'class': 'payBlkBig'}) 
-         price_txt = price.get_text( )  #to retrieve the item name text
-         #Removing Non Numeric symbols from Price
-         price_txt = re.sub("[^0-9]", "",price_txt )
-         print price_txt
-         price_txt = int(price_txt ) 
-         print "Price found"
          found = True
-
     except:
-
         item_txt = ""
         found = False
         print "Product not found"
+
+    #Retrieve price
+    try :
+        print "getting price"
+        price = soup.find('span', attrs={'class': 'payBlkBig'}) 
+        price_txt = price.get_text( )  #to retrieve the item name text
+        #Removing Non Numeric symbols from Price
+        price_txt = re.sub("[^0-9]", "",price_txt )
+        print price_txt
+        price_txt = int(price_txt ) 
+        found = True
+        print "Price found"
+    except :
+        price_txt = 0
+        found = False
         pass
 
     print  "Present price  of  "+item_txt + " on  Snapdeal  is Rs. " + str(price_txt)
