@@ -38,11 +38,11 @@ def flipkart_scrapper(url):
         print "Meta tag Description 'Content' not found"
 
     #retrieve Item 
-    item = soup.find('h1', attrs={'class': '_3eAQiD'})   #to find out only the tag we are interested in
+    item = str(soup.find('h1', attrs={'class': '_3eAQiD'}))  #to find out only the tag we are interested in
     if item== None :
         try :
-            item_txt = desc.split("Buy ")[1].split("Rs. " )[0]   #if not found, try scrapping using Title metadata name : description  
-            print "Debug 1 : Item found:",item_txt
+            item_txt = str(desc.split("Buy ")[1].split("Rs. " )[0] )  #if not found, try scrapping using Title metadata name : description  
+            print "Debug 1 : Item found:", str(item_txt)
             found = True
         except:
             item_txt = " "
@@ -51,8 +51,8 @@ def flipkart_scrapper(url):
     else :
         try :
             item_txt = item.get_text( )         #to retrieve the item name text
-            item_txt = item_txt.strip( )          # to remove trailing and leading whitespaces
-            print "Debug 2 : item_txt  found : ", item_txt
+            item_txt = str(item_txt.strip( ))          # to remove trailing and leading whitespaces
+            print "Debug 2 : item_txt  found : ", str(item_txt)
             found = True
         except :
             item_txt = item
