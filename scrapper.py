@@ -52,7 +52,7 @@ def flipkart_scrapper(url):
         try :
             item_txt = item.get_text( )         #to retrieve the item name text
             item_txt = item_txt.strip( )          # to remove trailing and leading whitespaces
-            print "Debug 2 : item_txt  found: ",item_txt
+            print "Debug 2 : item_txt  found : ", item_txt
             found = True
         except :
             item_txt = item
