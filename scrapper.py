@@ -51,7 +51,7 @@ def flipkart_scrapper(url):
     else :
         try :
             item_txt = item.get_text( )         #to retrieve the item name text
-            item_txt = str(item_txt.strip( ))          # to remove trailing and leading whitespaces
+            item_txt = str(item_txt.encode('utf-8').strip())          # to remove trailing and leading whitespaces
             print "Debug 2 : item_txt  found : ", str(item_txt)
             found = True
         except :
@@ -123,7 +123,7 @@ def amazon_scrapper(url):
         try :
             item = soup.find('h1', attrs={'class': 'a-size-large a-spacing-none'})
             item_txt = item.get_text( ).encode(sys.stdout.encoding, errors='replace' )
-            item_txt = item_txt.strip( )          # to remove trailing and leading whitespaces
+            item_txt = item_txt.encode('utf-8').strip()          # to remove trailing and leading whitespaces
             print "Debug 1 : item_txt found :", item_txt 
             found = True
         except :
@@ -132,7 +132,7 @@ def amazon_scrapper(url):
             print "Error 1 : Product not found"
     else :
         item_txt = item.get_text( )  #to retrieve the item name text
-        item_txt = str(item_txt.strip( ) )         # to remove trailing and leading whitespaces
+        item_txt = str(item_txt.encode('utf-8').strip() )         # to remove trailing and leading whitespaces
         print "Debug 2 : item_txt found :" + str(item_txt )
         found = True
 
@@ -202,7 +202,7 @@ def snapdeal_scrapper(url):
          #print item
          #item_txt = item.get_text( ).encode(sys.stdout.encoding, errors='replace' )  #to retrieve the item name text
          item_txt = item.get_text( )
-         item_txt = str(item_txt.strip( ) )         # to remove trailing and leading whitespaces
+         item_txt = str(item_txt.encode('utf-8').strip() )         # to remove trailing and leading whitespaces
          #print item_txt 
          found = True
     except:
