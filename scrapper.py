@@ -55,9 +55,12 @@ def flipkart_scrapper(url):
             print "Debug 2 : item_txt  found : ", str(item_txt)
             found = True
         except :
-            item_txt = item
-            found = False
-            print "Error 2 : Product not found"
+            #extract only text from HTML tag
+            item_soup = BeautifulSoup(item,'html.parser')
+            item = item_soup.findAll(text=True)
+            item_txt = item[1]
+            print "Error 2 : Product extracted from Html tag" + str(item_txt)
+            found = True
 
     #retrieve price
     price = soup.find('div', attrs={'class': '_1vC4OE _37U4_g'}) 
