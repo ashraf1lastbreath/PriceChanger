@@ -30,20 +30,20 @@ def get_Twdata( api):
             url = unshorten_url(url)
             url = removeURLencoding(url)
             domain = find_domain(url)
-
-            if domain== 'www.flipkart.com':
+ 
+            if domain== 'flipkart':
                 scrapped = flipkart_scrapper(url) 
                 price = scrapped[0]
                 item   = scrapped[1]
                 found = scrapped[2]
 
-            elif domain== 'www.amazon.in':
+            elif domain== 'amazon':
                 scrapped = amazon_scrapper(url)
                 price = scrapped[0]
                 item   = scrapped[1]
                 found = scrapped[2]
 
-            elif domain== 'www.snapdeal.com':
+            elif domain== 'snapdeal':
                 scrapped = snapdeal_scrapper(url)
                 price = scrapped[0]
                 item   = scrapped[1]
@@ -87,7 +87,7 @@ def mongo_post(status_id, screen_name, url, price, item, domain):
     print "status id :", status_id 
 
     pricechanger ={ }    
-    pricechanger = {'status_id':status_id, 'url':url, 'screen_name':screen_name, 'price':int(price), 'item':item, 'domain':str(domain), 'is_replied':is_replied}
+    pricechanger = {'status_id':status_id, 'url':url, 'screen_name':screen_name, 'price':int(price), 'item':item, 'domain':domain, 'is_replied':is_replied}
     # Item name converted to Binary  to prevent loss  of the non utf-8 characters [Mongo supports only utf-8 encoding]
     print "status id :", status_id  #Debug
 
@@ -108,7 +108,7 @@ def mongo_post(status_id, screen_name, url, price, item, domain):
 ################################
 def Tw_post( api, screen_name, price,  status_id, item, domain):
     try:
-        status = api.PostUpdate( str("@"+screen_name) + "  Initial Price of " + item[:85] + " on " + domain +" is Rs. " +str(price),in_reply_to_status_id=str(status_id))
+        status = api.PostUpdate( str("@"+screen_name) + "  Initial Price of " + item[:85] + " on " + domain +".com " +" is Rs. " +str(price),in_reply_to_status_id=str(status_id))
         print status.text
         print "Posted on Twitter"
         sys.stdout.flush()

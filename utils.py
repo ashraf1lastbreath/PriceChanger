@@ -3,15 +3,19 @@
 import httplib
 import urlparse
 
-
 #remove encoding etc appearing in url after '?' character 
 def removeURLencoding(url):
    head, sep, tail = url.partition('?')
    return head
 
+
 #extract domain name from url
 def find_domain(url):
-    return url.split("//")[-1].split("/")[0]
+    from urlparse import urlparse
+    #return url.split("//")[-1].split("/")[0]
+    domain = urlparse(url).hostname.split('.')[1]
+    return domain
+
 
 #prevent twitter from shortening the URL
 def unshorten_url(url):
@@ -23,3 +27,4 @@ def unshorten_url(url):
         return response.getheader('Location')
     else:
         return url
+
