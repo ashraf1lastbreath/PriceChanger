@@ -34,11 +34,8 @@ def get_Twdata( api):
             if domain== 'www.flipkart.com':
                 scrapped = flipkart_scrapper(url) 
                 price = scrapped[0]
-                print "price returned :",price
                 item   = scrapped[1]
-                print "item returned :",item
                 found = scrapped[2]
-                print "found value returned :",found
 
             elif domain== 'www.amazon.in':
                 scrapped = amazon_scrapper(url)
@@ -58,9 +55,9 @@ def get_Twdata( api):
             #proceed only if scrapped data has been found     
             if found :
                 #post tweet only if it is new    
-                isnew = mongo_post(status_id, screen_name, url, price, item)
+                isnew = mongo_post(status_id, screen_name, url, price, item, domain)
                 if isnew:
-                    Tw_post(api, screen_name, price,  status_id, item)
+                    Tw_post(api, screen_name, price,  status_id, item, domain)
 
         except requests.exceptions.MissingSchema:
             print "Tweet status doesnt have any url"
@@ -69,7 +66,7 @@ def get_Twdata( api):
 
 #3.Post to MongoDb
 ####################
-def mongo_post(status_id, screen_name, url, price, item):   
+def mongo_post(status_id, screen_name, url, price, item, domain):   
     parser = SafeConfigParser( )
     parser.read('config.ini')
     is_replied = False
@@ -90,7 +87,7 @@ def mongo_post(status_id, screen_name, url, price, item):
     print "status id :", status_id 
 
     pricechanger ={ }    
-    pricechanger = {'status_id':status_id, 'url':url, 'screen_name':screen_name, 'price':int(price), 'item':item, 'is_replied':is_replied}
+    pricechanger = {'status_id':status_id, 'url':url, 'screen_name':screen_name, 'price':int(price), 'item':item, 'domain':domain, 'is_replied':is_replied}
     # Item name converted to Binary  to prevent loss  of the non utf-8 characters [Mongo supports only utf-8 encoding]
     print "status id :", status_id  #Debug
 
@@ -109,9 +106,9 @@ def mongo_post(status_id, screen_name, url, price, item):
 
 #4. Post Reply to Twitter Mentions
 ################################
-def Tw_post( api, screen_name, price,  status_id, item):
+def Tw_post( api, screen_name, price,  status_id, item, domain):
     try:
-        status = api.PostUpdate( str("@"+screen_name) + "  Initial Price of " + item[:85] + " is Rs. " +str(price),in_reply_to_status_id=str(status_id))
+        status = api.PostUpdate( str("@"+screen_name) + "  Initial Price of " + item[:85] + " on " + domain +" is Rs. " +str(price),in_reply_to_status_id=str(status_id))
         print status.text
         print "Posted on Twitter"
         sys.stdout.flush()
