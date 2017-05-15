@@ -63,7 +63,7 @@ def flipkart_scrapper(url):
     price = soup.find('div', attrs={'class': '_1vC4OE _37U4_g'}) 
     if price== None :            
         try :
-            price_txt = desc.split("Rs. ")[1].split(" ")[0]                 #if not found, try scrapping using Title metadata name : description  
+            price_txt = int(desc.split("Rs. ")[1].split(" ")[0] )                #if not found, try scrapping using Title metadata name : description 
             print "Debug 1 : Price found :",str(price_txt)
             found = True
         except :
@@ -84,7 +84,7 @@ def flipkart_scrapper(url):
             found = False
             print "Error 2 : Price not found"
             pass
-    price_txt = int(price_txt)
+
     print  "Present price  of  " + item_txt  + " on Flipkart is Rs. " + str(price_txt)
     print ""
     return (price_txt, item_txt, found )
