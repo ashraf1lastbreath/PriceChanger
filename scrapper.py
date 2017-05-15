@@ -86,7 +86,7 @@ def flipkart_scrapper(url):
             pass
  
     price_txt = int(price_txt)
-    print  "Present price  of  "+item_txt + " on Flipkart  is Rs. " + str(price_txt)
+    print  "Present price  of  " + item_txt  + " on Flipkart  is Rs. " + str(price_txt)
     print ""
     return (price_txt, item_txt, found )
 
