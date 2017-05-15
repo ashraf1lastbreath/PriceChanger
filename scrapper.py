@@ -85,8 +85,8 @@ def flipkart_scrapper(url):
             print "Error 2 : Price not found"
             pass
 
-    #print  "Present price  of  " + item_txt  + " on Flipkart is Rs. " + str(price_txt)
-    print  "Present price  on Flipkart is Rs. " + str(price_txt)
+    print  "Present price  of  " + str(item_txt ) + " on Flipkart is Rs. " + str(price_txt)
+    #print  "Present price  on Flipkart is Rs. ", price_txt
     print ""
     return (price_txt, item_txt, found )
 
