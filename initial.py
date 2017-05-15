@@ -87,7 +87,7 @@ def mongo_post(status_id, screen_name, url, price, item, domain):
     print "status id :", status_id 
 
     pricechanger ={ }    
-    pricechanger = {'status_id':status_id, 'url':url, 'screen_name':screen_name, 'price':int(price), 'item':item, 'domain':domain, 'is_replied':is_replied}
+    pricechanger = {'status_id':status_id, 'url':url, 'screen_name':screen_name, 'price':int(price), 'item':item, 'domain':str(domain), 'is_replied':is_replied}
     # Item name converted to Binary  to prevent loss  of the non utf-8 characters [Mongo supports only utf-8 encoding]
     print "status id :", status_id  #Debug
 
