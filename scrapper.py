@@ -165,7 +165,7 @@ def amazon_scrapper(url):
             print "Error 1 : Price not found"
             pass
     else :
-        #try :
+        try :
             price = soup.find('span', attrs={'class': 'a-size-medium a-color-price'}) 
             if price == None:      #if again price not faound
                 try :
