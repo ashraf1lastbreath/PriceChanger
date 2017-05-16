@@ -148,19 +148,22 @@ def amazon_scrapper(url):
                 price = soup.find('span', attrs = {'class' : 'currencyINR'})
             price = price.get_text( )
             price = price.split("-",1)[0]
+
             #provide encoding
             #price_txt = price.get_text( ).encode(sys.stdout.encoding, errors='replace' )  #to retrieve the item name text
             price_txt = (price.get_text( )).encoding = 'utf-8'  
+
             #Removing Non Numeric symbols from Price
             price_txt = re.sub("[^0-9]", "",price_txt )
             price_txt = int(price_txt ) / 100
             found = True
+
             print "Debug 1 : Price found :" + str(price_txt)
         except :
             price_txt = 0
-        found = False
-        print "Error 1 : Price not found"
-        pass
+            found = False
+            print "Error 1 : Price not found"
+            pass
     else :
         #try :
             price = soup.find('span', attrs={'class': 'a-size-medium a-color-price'}) 
@@ -171,21 +174,20 @@ def amazon_scrapper(url):
                     price = soup.find('span', attrs = {'class' : 'currencyINR'})
 
             price = price.get_text( )
-            print "price with dash :", price
+            #print "price with dash :", price
             price = price.split("-",1)[0] 
-            print "price without dash :" , price
+            #print "price without dash :" , price
 
-            #price_txt = price.get_text( ) #to retrieve the item name text
             #Removing Non Numeric symbols from Price
             price_txt = re.sub("[^0-9]", "",price)
             price_txt = int(price_txt ) / 100
             found = True
             print "Debug 2 : Price found :" + str(price_txt)
-            '''except :
+        except :
             price_txt = 0
             found = False
             print "Error 2 : Price not found"
-            pass'''
+            pass
 
     print  "Present price  of  "+item_txt + " on  Amazon  is Rs. " + str(price_txt)
     print ""
