@@ -38,7 +38,7 @@ def flipkart_scrapper(url):
         print "Meta tag Description 'Content' not found"
 
     #retrieve Item 
-    item = str(soup.find('h1', attrs={'class': '_3eAQiD'}))  #to find out only the tag we are interested in
+    item = soup.find('h1', attrs={'class': '_3eAQiD'})  #to find out only the tag we are interested in
     if item== None :
         try :
             item_txt = str(desc.split("Buy ")[1].split("Rs. " )[0] )  #if not found, try scrapping using Title metadata name : description  
@@ -118,11 +118,12 @@ def amazon_scrapper(url):
     found = False
 
     #retrieve Item
-    item = soup.find('h1', attrs={'class': 'a-size-large a-spacing-none'})
+    #item = soup.find('h1', attrs={'class': 'a-size-large a-spacing-none'})
+    item = soup.find('span', attrs={'id': 'productTitle'}) 
     if item == None:
         try :
             item = soup.find('h1', attrs={'class': 'a-size-large a-spacing-none'})
-            item_txt = item.get_text( ).encode(sys.stdout.encoding, errors='replace' )
+            #item_txt = item.get_text( ).encode(sys.stdout.encoding, errors='replace' )
             item_txt = item_txt.encode('utf-8').strip()          # to remove trailing and leading whitespaces
             print "Debug 1 : item_txt found :", item_txt 
             found = True
@@ -140,8 +141,16 @@ def amazon_scrapper(url):
     price = soup.find('span', attrs={'class': 'a-size-medium a-color-price'}) 
     if price ==None:
         try :
-            price = soup.find('span', attrs={'class': 'a-size-medium a-color-price'}) 
-            price_txt = price.get_text( ).encode(sys.stdout.encoding, errors='replace' )  #to retrieve the item name text
+            #For a range of Price block
+            try :
+                price = soup.find('span', attrs={'id': 'priceblock_ourprice'}) 
+            except :
+                price = soup.find('span', attrs = {'class' : 'currencyINR'})
+            price = price.get_text( )
+            price = price.split("-",1)[0]
+            #provide encoding
+            #price_txt = price.get_text( ).encode(sys.stdout.encoding, errors='replace' )  #to retrieve the item name text
+            price_txt = (price.get_text( )).encoding = 'utf-8'  
             #Removing Non Numeric symbols from Price
             price_txt = re.sub("[^0-9]", "",price_txt )
             price_txt = int(price_txt ) / 100
@@ -153,19 +162,30 @@ def amazon_scrapper(url):
         print "Error 1 : Price not found"
         pass
     else :
-        try :
+        #try :
             price = soup.find('span', attrs={'class': 'a-size-medium a-color-price'}) 
-            price_txt = price.get_text( ) #to retrieve the item name text
+            if price == None:      #if again price not faound
+                try :
+                    price = soup.find('span', attrs={'id': 'priceblock_ourprice'}) 
+                except :
+                    price = soup.find('span', attrs = {'class' : 'currencyINR'})
+
+            price = price.get_text( )
+            print "price with dash :", price
+            price = price.split("-",1)[0] 
+            print "price without dash :" , price
+
+            #price_txt = price.get_text( ) #to retrieve the item name text
             #Removing Non Numeric symbols from Price
-            price_txt = re.sub("[^0-9]", "",price_txt )
+            price_txt = re.sub("[^0-9]", "",price)
             price_txt = int(price_txt ) / 100
             found = True
             print "Debug 2 : Price found :" + str(price_txt)
-        except :
+            '''except :
             price_txt = 0
             found = False
             print "Error 2 : Price not found"
-            pass
+            pass'''
 
     print  "Present price  of  "+item_txt + " on  Amazon  is Rs. " + str(price_txt)
     print ""
