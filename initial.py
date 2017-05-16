@@ -22,7 +22,8 @@ def get_Twdata( api):
         status_id =  mention.id
         url = msg[9:]
         #url = "https://www.flipkart.com/auto-hub-dashboard-rear-window-sun-shade-universal-car/p/itmess9vafzazpch"
-        #url= "http://www.amazon.in/Sanyo-inches-XT-43S7100F-Full-Black/dp/B01ICVLK4S?_encoding=UTF8&deviceType=desktop&ref_=br_isw_strs-1"
+        #url= "http://www.amazon.in/Puma-Unisex-Black-White-Flip/dp/B018VWYL62/ref=lp_1983575031_1_14?s=shoes&ie=UTF8&qid=1494932239&sr=1-14&nodeID=1983575031&psd=1"
+        url = "http://www.amazon.in/dp/B01CGMRK8E?psc=1"
         #url = "https://www.snapdeal.com/product/micromax-spark-vdeo-q15-8gb/636218001907"
         screen_name = mention.user.screen_name
 
@@ -109,7 +110,7 @@ def mongo_post(status_id, screen_name, url, price, item, domain):
 def Tw_post( api, screen_name, price,  status_id, item, domain):
     try:
         status = api.PostUpdate( str("@"+screen_name) + "  Initial Price of " + item[:85] + " on " + domain +".com " +" is Rs. " +str(price),in_reply_to_status_id=str(status_id))
-        print status.text
+        #print status.text
         print "Posted on Twitter"
         sys.stdout.flush()
     except twitter.error.TwitterError:
