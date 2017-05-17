@@ -39,14 +39,14 @@ Wait and watch until we notify you by replying to your tweet when the price of t
 
 PriceChanger has the following Python files :
 
-initial.py : 
+###### initial.py : 
 * Fetch data from Twitter through Twitter API whenever @trakila is mentioned
 * Read API data from 'config.ini'  file 
 * Set up twitter API data from config file
 * Fetch Twitter Data, Post to MongoDB
 * Post Reply to Twitter Mentions
 
-scrapper.py : Scrap the URL provided on Twitter to fetch data regarding the price of the item from following websites :
+###### scrapper.py : Scrap the URL provided on Twitter to fetch data regarding the price of the item from following websites :
 
 * Flipkart :
 
@@ -99,17 +99,17 @@ scrapper.py : Scrap the URL provided on Twitter to fetch data regarding the pric
 	* define encoding at response level itself
 	* scrap item name and price directly from website 	
 
-final.py :  
+###### final.py :  
 * Retrieve Data from MongoDb to fetch old price and tweet status id. 
 * Scrap the old URL provided on Twitter to fetch the latest price of the item.
 * Compare the two prices
 * If price has reduced, post the reduced price of the product on user's earlier tweet.
 
-bootstrap.py :
+###### bootstrap.py :
 
 use Blocking Scheduler to run a cron job to run initial.py and final.py after regular intervals 
 
-utils.py : 
+###### utils.py : 
 
 * contains useful utility functions used. 
 * Eg. :
