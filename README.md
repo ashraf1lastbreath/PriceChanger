@@ -1,90 +1,139 @@
+# About Trakila
+
+Trakila is an easy to use tracking software, which can be used to track data from websites. 
+The data can then be analyzed and worked around with according to one's own needs. 
+Trakila also provides notifications to the users according to the logic provided by them.
+
+As of now, Trakila is being used to track prices of items on popular Indian online shopping websites. 
+It is a friendly and useful software which helps to track prices of items online,and notify users whenever the price of the item goes down on popular online shopping portals.
+
+A user provides the url of the item whose price he wants to track online. As of now, Trakila accepts user URLs through Twitter only.
+The user tweets @trakila the url of the item. Trakila fetches the price of the item, and tweets back the present price of the item to the user handle.
+In the background Trakila continously keeps tracking the item for any fluctuations in price
 
 
-[![](http://icons.iconarchive.com/icons/graphics-vibe/simple-rounded-social/128/twitter-icon.png)](https://twitter.com/Price_Changer)
-# PriceChanger  
-##### Powered by Twitter
--------------------
-
-PriceChanger is a friendly and useful app built using Python Language, powered by  Twitter DevTools, which helps to notify users whenever the price of the item goes down on popular online shopping portals like Flipkart, Amazon and SnapDeal.
-
-Built using Python language, it uses the following Python packages / modules :
-  - BeautifulSoup4
-  - Requests
-  - Twitter
-  - Pymongo 
-  - SafeConfigParser
-
-#  Features!
-
-  - Tweet us the URL of the product you want to keep track of on popular e-shopping portals, and leave the rest to us. Wait and watch until we notify you by replying to your tweet when the price of the product goes down.
-  - Supports only Flipkart portal as of now. Will be working to add other popular ecommerce sites very soon.
+### Objective :
+Track prices of your wish list items, set price drop alerts, study price graph history.
 
 
-### Tech
+### Design :
+Built using Python language, Trakila uses the following packages / modules :
+
+* BeautifulSoup4
+* Requests
+* SafeConfigParser
+* Twitter Rest API
+* Pymongo
+* MongoDB Cloud
+* MongoDB Compass
+* BlockingScheduler
+* Heroku PaaS
+
+### Usage :
+
+Tweet us the URL of the product you want to keep track of on popular e-shopping portals, and leave the rest to us. 
+Wait and watch until we notify you by replying to your tweet when the price of the product goes down.
+
+
+### Technical :
 
 PriceChanger has the following Python files :
 
-* [scrapper.py] - It performs following operations :
-    * Fetch data from Twitter through Twitter API whenever Price_Changer is mentioned
-    *  Scrap the URL provided on Twitter to fetch data regarding the price of the item
-    *  Post the data to MongoDb
-    *  Post the initial price of the product on user's tweet
+initial.py : 
+* Fetch data from Twitter through Twitter API whenever @trakila is mentioned
+* Read API data from 'config.ini'  file 
+* Set up twitter API data from config file
+* Fetch Twitter Data, Post to MongoDB
+* Post Reply to Twitter Mentions
 
-* [droid.py] - It performs following operations :
-    * Retrieve Data from MongoDb to fetch old price and tweet status id
-    *  Scrap the old URL provided on Twitter to fetch the latest price of the item
-    *  Compare the two prices
-    *  If price has reduced, post the reduced price of the product on user's earlier tweet.
-    
+scrapper.py : Scrap the URL provided on Twitter to fetch data regarding the price of the item from following websites :
 
-### Installation
+* Flipkart :
 
-PriceChanger requires following dependencies to run.
-  - BeautifulSoup4
-  - Requests
-  - Twitter
-  - Pymongo 
-  - SafeConfigParser
-  
-To install the dependencies and devDependencies and start the server, simply typ ethe following on the command prompt, before starting the programs :
+	* include http header fields for Requests 
+	```
+    headers =   {
+   	'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+    'Accept-Encoding' : 'gzip, deflate, sdch, br', 
+    'Accept-Language' : 'en-US,en;q=0.8',
+    'User-Agent' : 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.117 Safari/537.36'
+    }
+    ```
+	* define encoding at response level itself
+	```
+    response.encoding = 'utf-8'
+    ```
+	* try to scrap data from metadata tag for Description or description on Flipkart page
+	```
+    desc= soup.find(attrs={'name':'Description'})
+    ```
+	* if Meta tag Description 'Content' is not found, try scrapping using Title metadata 'name : description'  on Flipkart page
+	```
+    item = soup.find('h1', attrs={'class': '_3eAQiD'}) 
+    price_txt = int(desc.split("Rs. ")[1].split(" ")[0] )   
+    ```
 
-```sh
-$ pip install -r requirements.txt
-```
+* Amazon :
+	* include http header fields for Requests (similar to Flipkart)
+	* define encoding at response level itself
+	* try to scrap data from 'span' id': 'productTitle' on Amazon page
+	```
+      item = soup.find('span', attrs={'id': 'productTitle'}) 
+      price = soup.find('span', attrs={'class': 'a-size-medium a-color-price'}) 
+     ```
+    * if not found, try to scrap from 'class': 'a-size-large a-spacing-none'
+    ```
+    item = soup.find('h1', attrs={'class': 'a-size-large a-spacing-none'})
+    price = soup.find('span', attrs={'id': 'priceblock_ourprice'}) 
+    ```
+    * For some cases, where a range of price is mentioned, need to scrap only the first price
+    ```
+    try :
+		price = soup.find('span', attrs={'id': 'priceblock_ourprice'}) 
+	except :
+		price = soup.find('span', attrs = {'class' : 'currencyINR'})
+     ```
+ * Snapdeal :
+ 	* relatively easier to scrap
+	* include http header fields for Requests 
+	* define encoding at response level itself
+	* scrap item name and price directly from website 	
+
+final.py :  
+* Retrieve Data from MongoDb to fetch old price and tweet status id. 
+* Scrap the old URL provided on Twitter to fetch the latest price of the item.
+* Compare the two prices
+* If price has reduced, post the reduced price of the product on user's earlier tweet.
+
+bootstrap.py :
+
+use Blocking Scheduler to run a cron job to run initial.py and final.py after regular intervals 
+
+utils.py : 
+
+* contains useful utility functions used. 
+* Eg. :
+	*  remove encoding etc appearing in url after '?' character 
+	*  extract domain name from url
+	*  prevent twitter from shortening the URL
+
+######  requirements.txt :
+
+contains all the dependencies that need to be installed on the environment to run Trakila. Use   ```   pip install -r requirements.txt ``` to install all the dependencies
+
+######  ProcFile :
+required for declaring what commands are run by Trakila's dynos on the Heroku platform. It follows the process model. Necessary to declare various process types, such as multiple types of workers, a singleton process like a clock, or a consumer of the Twitter streaming API
+
+######   config.ini : 
+contains all the configuration details for Twitter API and MongoDB Cloud
+
+### Future Plans :
+* target price by user
+* price graph history
+* facebook integration
+* email integration
+* SMS integration
+* point based game board for highest winner
 
 
 
-### Usage
- - Run both the python files using a cronjob on a server 
-  - On Twitter simply post the URL of any product from any popular ecommerece sites, and tweet it to @Price_Changer'
-                   @Price_Changer space URL    
-
-#License
-
-##Ashraf
-
-**Free Software, Hell Yeah!**
-
-[//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
-
-
-   [dill]: <https://github.com/joemccann/dillinger>
-   [git-repo-url]: <https://github.com/joemccann/dillinger.git>
-   [john gruber]: <http://daringfireball.net>
-   [df1]: <http://daringfireball.net/projects/markdown/>
-   [markdown-it]: <https://github.com/markdown-it/markdown-it>
-   [Ace Editor]: <http://ace.ajax.org>
-   [node.js]: <http://nodejs.org>
-   [Twitter Bootstrap]: <http://twitter.github.com/bootstrap/>
-   [jQuery]: <http://jquery.com>
-   [@tjholowaychuk]: <http://twitter.com/tjholowaychuk>
-   [express]: <http://expressjs.com>
-   [AngularJS]: <http://angularjs.org>
-   [Gulp]: <http://gulpjs.com>
-
-   [PlDb]: <https://github.com/joemccann/dillinger/tree/master/plugins/dropbox/README.md>
-   [PlGh]: <https://github.com/joemccann/dillinger/tree/master/plugins/github/README.md>
-   [PlGd]: <https://github.com/joemccann/dillinger/tree/master/plugins/googledrive/README.md>
-   [PlOd]: <https://github.com/joemccann/dillinger/tree/master/plugins/onedrive/README.md>
-   [PlMe]: <https://github.com/joemccann/dillinger/tree/master/plugins/medium/README.md>
-   [PlGa]: <https://github.com/RahulHP/dillinger/blob/master/plugins/googleanalytics/README.md>
