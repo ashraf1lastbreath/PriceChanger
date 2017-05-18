@@ -11,4 +11,5 @@ python-twitter
 timestring
 pymongo
 APScheduler==3.0.0
+facebook-sdk
 #
