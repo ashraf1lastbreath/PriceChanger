@@ -26,7 +26,7 @@ def mongo_retrieve( api):
         print record
         newprice = isPriceDecreased(record['url'],record['price'])
         if newprice > 0:
-            Tw_reduce_post(api, record['screen_name'], newprice, record['status_id'], record['item'])
+            Tw_reduce_post(api, record['screen_name'], newprice, record['status_id'], record['item'], record['domain'])
             db.find_one_and_update(
                 {'_id': record['_id']},
                 {'$set': {'is_replied': True}}
@@ -35,8 +35,8 @@ def mongo_retrieve( api):
 
 #3. Post  Price Reduction Notification on Twitter :
 ########################################## 
-def Tw_reduce_post(api, screen_name, price,  status_id , item):
-    status = api.PostUpdate( str("@"+screen_name) + "  Price of " + item[:80] + " has reduced to Rs. " +str(price),in_reply_to_status_id=str(status_id))
+def Tw_reduce_post(api, screen_name, price,  status_id , item, domain):
+    status = api.PostUpdate(str("@"+screen_name) + "  Price of " + item[:70] + " on " + domain +".com " + " has reduced to Rs. " +str(price),in_reply_to_status_id=str(status_id))
     print(status.text)
     print "Notified user about reduced price on Twitter"
 
@@ -44,24 +44,20 @@ def Tw_reduce_post(api, screen_name, price,  status_id , item):
 #4. Compare price from Database and price from scrapper again:
 ####################################################### 
 def isPriceDecreased(url,oldprice):
-    url = unshorten_url(url)
-    url = removeURLencoding(url)
-    domain = find_domain(url)
-
     try:
         url = unshorten_url(url)
         url = removeURLencoding(url)
         domain = find_domain(url)
 
-        if domain== 'www.flipkart.com':
+        if domain== 'flipkart':
             scrapped = flipkart_scrapper(url) 
             newprice = scrapped[0]
 
-        elif domain== 'www.amazon.in':
+        elif domain== 'amazon':
             scrapped = amazon_scrapper(url)
             newprice = scrapped[0]
 
-        elif domain== 'www.snapdeal.com':
+        elif domain== 'snapdeal':
             scrapped = snapdeal_scrapper(url)
             newprice = scrapped[0]
 
@@ -74,7 +70,7 @@ def isPriceDecreased(url,oldprice):
 
     print "newprice",newprice
     print "oldprice",oldprice
-    if newprice < oldprice:
+    if int(newprice) < int(oldprice):
         return newprice
     else:
         return 0
@@ -104,5 +100,5 @@ api = twitter.Api(consumer_key = parser.get('twitter_API', 'consumer_key'),
         access_token_key = parser.get('twitter_API', 'access_token_key'),
         access_token_secret = parser.get('twitter_API', 'access_token_secret'))
 
-mongo_data = mongo_retrieve(api )   '''
+mongo_data = mongo_retrieve(api )  '''
 
