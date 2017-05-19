@@ -1,21 +1,21 @@
 # -*- coding: utf-8 -*-
 
 from apscheduler.schedulers.blocking import BlockingScheduler
-from initial import initial
-from final import final
+from tw_fetch import tw_fetch
+from tw_post import tw_post
 import sys
 
 sched = BlockingScheduler()
 
 
-@sched.scheduled_job('interval', id='initial_fun', minutes=5)
+@sched.scheduled_job('interval', id='initial_fun', minutes=0.5)
 def initial_fun( ):
-    initial( )
+    tw_fetch( )
 
 
 @sched.scheduled_job('interval', id='final_fun', hours=2)
 def final_fun( ):
-    final( )
+    tw_post( )
 
 
 @sched.scheduled_job('cron', day_of_week='mon-fri', hour=17)
