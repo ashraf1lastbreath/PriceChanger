@@ -23,7 +23,7 @@ def get_Twdata( api):
         url = msg[9:]
         #url = "https://www.flipkart.com/auto-hub-dashboard-rear-window-sun-shade-universal-car/p/itmess9vafzazpch"
         #url= "http://www.amazon.in/Puma-Unisex-Black-White-Flip/dp/B018VWYL62/ref=lp_1983575031_1_14?s=shoes&ie=UTF8&qid=1494932239&sr=1-14&nodeID=1983575031&psd=1"
-        url = "http://www.amazon.in/dp/B01CGMRK8E?psc=1"
+        #url = "http://www.amazon.in/dp/B01CGMRK8E?psc=1"
         #url = "https://www.snapdeal.com/product/micromax-spark-vdeo-q15-8gb/636218001907"
         screen_name = mention.user.screen_name
 
