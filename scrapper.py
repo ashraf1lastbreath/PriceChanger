@@ -85,7 +85,7 @@ def flipkart_scrapper(url):
 
 
 
-      #RETRIEVE  PRICE
+    #RETRIEVE  PRICE
     ####################################################
     search_str_price = "_1vC4OE"
     price = soup.select("div[class^="+str(search_str_price)+"]")
@@ -249,6 +249,7 @@ def amazon_scrapper(url):
 
     if price== None :     
         try:
+            #Case 1 :  Price wasnt obtained, since it contains range of price
             #For a range of Price block
             start = "<span "
             end = "00 - "
