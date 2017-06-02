@@ -44,10 +44,6 @@ def Tw_reduce_post(api, screen_name, price,  status_id , item):
 #4. Compare price from Database and price from scrapper again:
 ####################################################### 
 def isPriceDecreased(url,oldprice):
-    url = unshorten_url(url)
-    url = removeURLencoding(url)
-    domain = find_domain(url)
-
     try:
         url = unshorten_url(url)
         url = removeURLencoding(url)
@@ -68,16 +64,16 @@ def isPriceDecreased(url,oldprice):
         else :
             raise NotImplementedError ("This domain is not supported yet in our system. Be back Later !")
 
+        print "newprice",newprice
+        print "oldprice",oldprice
+        if newprice < oldprice:
+            return newprice
+
     except :
         print "Unable to fetch new price from website. Will try again later."
+        return 0
         sys.stdout.flush()    
 
-    print "newprice",newprice
-    print "oldprice",oldprice
-    if newprice < oldprice:
-        return newprice
-    else:
-        return 0
 
 
 #Set up twitter API data
